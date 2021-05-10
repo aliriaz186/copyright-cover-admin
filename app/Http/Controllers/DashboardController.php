@@ -9,6 +9,7 @@ use App\Subscription;
 use App\User;
 use App\UserCardDetails;
 use App\UserTokens;
+use App\WebsiteText;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use services\email_messages\ForgotPasswordMessage;
@@ -41,6 +42,32 @@ class DashboardController extends Controller
             $user->subscription = Subscription::where('user_id', $user->id)->first();
         }
         return view('dashboard.all-users')->with(['users' => $users]);
+    }
+
+    public function editGuides()
+    {
+        $data = WebsiteText::where('type', 'guides')->first();
+        return view('dashboard.edit-guides')->with(['data' => $data]);
+    }
+
+    public function updatetext(Request $request)
+    {
+        try {
+            $websiteText = WebsiteText::where('type', $request->type)->first();
+            $websiteText->text =  $request->text;
+            $websiteText->update();
+            session()->flash('msg', 'Text updated!');
+            return redirect()->back();
+        }catch (\Exception $exception){
+            return redirect()->back()->withErrors([$exception->getMessage()]);
+        }
+
+    }
+
+    public function editTips()
+    {
+        $data = WebsiteText::where('type', 'tips')->first();
+        return view('dashboard.edit-tips')->with(['data' => $data]);
     }
 
     public function block($id)

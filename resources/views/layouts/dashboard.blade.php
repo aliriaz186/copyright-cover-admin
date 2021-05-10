@@ -97,6 +97,18 @@
                                 <span>USERS</span>
                             </a>
                         </li>
+                        <li  class="{{\Request::is('edit-guides') ? 'bgactivelink' : ''}}" style="border: 1px solid white;border-bottom: 0px">
+                            <a class="{{\Request::is('edit-guides') ? 'coloractivelink' : ''}}" href="{{url('edit-guides')}}">
+{{--                                <i class="fas fa-users"></i>--}}
+                                <span>GUIDES</span>
+                            </a>
+                        </li>
+                        <li  class="{{\Request::is('edit-tips') ? 'bgactivelink' : ''}}" style="border: 1px solid white;border-bottom: 0px">
+                            <a class="{{\Request::is('edit-tips') ? 'coloractivelink' : ''}}" href="{{url('edit-tips')}}">
+{{--                                <i class="fas fa-users"></i>--}}
+                                <span>TIPS</span>
+                            </a>
+                        </li>
                         <li class="" style="border: 1px solid white;">
                             <a href="{{ route('logout-user') }}">
 {{--                                <i class="fas fa-user"></i>--}}
