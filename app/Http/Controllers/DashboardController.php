@@ -47,11 +47,21 @@ class DashboardController extends Controller
 
     public function postAddTokens(Request $request){
         try {
-            $token = UserTokens::where('user_id', $request->selectedUserId)->first();
-            $token->token = (int)$token->token + $request->certificateToken;
-            $token->update();
-            session()->flash('msg', 'Token Added Successfully!');
-            return redirect()->back();
+            if (UserTokens::where('user_id', $request->selectedUserId)->exists()){
+                $token = UserTokens::where('user_id', $request->selectedUserId)->first();
+                $token->token = (int)$token->token + $request->certificateToken;
+                $token->update();
+                session()->flash('msg', 'Token Added Successfully!');
+                return redirect()->back();
+            }else{
+                $token = new UserTokens();
+                $token->user_id =  $request->selectedUserId;
+                $token->token = $request->certificateToken;
+                $token->save();
+                session()->flash('msg', 'Token Added Successfully!');
+                return redirect()->back();
+            }
+
         }catch (\Exception $exception){
             return redirect()->back()->withErrors([$exception->getMessage()]);
 

@@ -37,7 +37,7 @@
                             <td>{{$item->created_at}}</td>
                             <td>{{$item->email}}</td>
                             <td>{{$item->subscription->subscription_expiry}}</td>
-                            <td>{{$item->tokens->token}}</td>
+                            <td>{{$item->tokens->token ?? 0}}</td>
                             <td>
                                 <button style="margin-top: 5px" onclick="selectedUserIdSet(`{{$item->id ?? ''}}`,`{{$item->first_name ?? ''}} {{$item->last_name ?? ''}}`)"  data-toggle="modal" data-target="#myModal1" class="btn btn-success" >ADD TOKENS</button>
 
