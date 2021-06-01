@@ -40,8 +40,23 @@ class DashboardController extends Controller
         $users = User::all();
         foreach ($users as $user){
             $user->subscription = Subscription::where('user_id', $user->id)->first();
+            $user->tokens = UserTokens::where('user_id', $user->id)->first();
         }
         return view('dashboard.all-users')->with(['users' => $users]);
+    }
+
+    public function postAddTokens(Request $request){
+        try {
+            $token = UserTokens::where('user_id', $request->selectedUserId)->first();
+            $token->token = (int)$token->token + $request->certificateToken;
+            $token->update();
+            session()->flash('msg', 'Token Added Successfully!');
+            return redirect()->back();
+        }catch (\Exception $exception){
+            return redirect()->back()->withErrors([$exception->getMessage()]);
+
+        }
+
     }
 
     public function editGuides()

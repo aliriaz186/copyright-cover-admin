@@ -24,6 +24,7 @@
                     <th>DATE JOINED</th>
                     <th>EMAIL</th>
                     <th>SUBSCRIPTION EXPIRY</th>
+                    <th>TOKENS</th>
                     <th>OPTIONS</th>
                 </tr>
                 </thead>
@@ -36,14 +37,16 @@
                             <td>{{$item->created_at}}</td>
                             <td>{{$item->email}}</td>
                             <td>{{$item->subscription->subscription_expiry}}</td>
+                            <td>{{$item->tokens->token}}</td>
                             <td>
+                                <button style="margin-top: 5px" onclick="selectedUserIdSet(`{{$item->id ?? ''}}`,`{{$item->first_name ?? ''}} {{$item->last_name ?? ''}}`)"  data-toggle="modal" data-target="#myModal1" class="btn btn-success" >ADD TOKENS</button>
 
-                                <button onclick="setName(`{{$item->first_name ?? ''}} {{$item->last_name ?? ''}}`, `{{$item->email}}`,`{{$item->created_at}}`,`{{$item->subscription->subscription_expiry}}`,`{{$item->company_name}}`,`{{$item->address}}`,`{{$item->city}}`,`{{$item->state}}`,`{{$item->country}}`,`{{$item->telephone}}`,`{{$item->profession}}`,`{{$item->postal_code}}`)"  data-toggle="modal" data-target="#myModal" class="btn btn-info" >VIEW PROFILE</button>
+                                <button style="margin-top: 5px" onclick="setName(`{{$item->first_name ?? ''}} {{$item->last_name ?? ''}}`, `{{$item->email}}`,`{{$item->created_at}}`,`{{$item->subscription->subscription_expiry}}`,`{{$item->company_name}}`,`{{$item->address}}`,`{{$item->city}}`,`{{$item->state}}`,`{{$item->country}}`,`{{$item->telephone}}`,`{{$item->profession}}`,`{{$item->postal_code}}`)"  data-toggle="modal" data-target="#myModal" class="btn btn-info" >VIEW PROFILE</button>
                                 @if($item->active == 1)
-                                    <a class="btn btn-danger" href="{{url('/block-user/'.$item->id)}}">BLOCK</a>
+                                    <a style="margin-top: 5px" class="btn btn-danger" href="{{url('/block-user/'.$item->id)}}">BLOCK</a>
 
                                 @else
-                                    <a class="btn btn-success" href="{{url('/unblock-user/'.$item->id)}}">UNBLOCK</a>
+                                    <a style="margin-top: 5px" class="btn btn-success" href="{{url('/unblock-user/'.$item->id)}}">UNBLOCK</a>
                                 @endif
 
                             </td>
@@ -143,6 +146,66 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal" id="myModal1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title" id="selectedUseruser"></h3>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <form action="{{url('post-add-tokens')}}" method="post">
+                            @csrf
+                            <h5>Select Tokens to add</h5>
+                            <select name="certificateToken" class="form-control">
+                                <option value="0">0</option>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                                <option value="35">35</option>
+                                <option value="40">40</option>
+                                <option value="45">45</option>
+                                <option value="50">50</option>
+                                <option value="55">55</option>
+                                <option value="60">60</option>
+                                <option value="65">65</option>
+                                <option value="70">70</option>
+                                <option value="75">75</option>
+                                <option value="80">80</option>
+                                <option value="85">85</option>
+                                <option value="90">90</option>
+                                <option value="95">95</option>
+                                <option value="100">100</option>
+                            </select>
+                            <input type="hidden" id="selectedUserId" name="selectedUserId">
+                            <br>
+                            <button type="submit" class="btn btn-primary">ADD</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <script>
         function setName(name, email, datejoined, subscriptionexpiry, company, address, city, state, country, phone, profession, postalCode) {
             document.getElementById('resetheading').innerText = name + ' Profile';
@@ -157,6 +220,11 @@
             document.getElementById('uphone').innerText = phone;
             document.getElementById('uprofession').innerText = profession;
             document.getElementById('upostalCode').innerText = postalCode;
+        }
+
+        function selectedUserIdSet(id, user) {
+            document.getElementById('selectedUserId').value = id;
+            document.getElementById('selectedUseruser').innerText = 'User : '+ user;
         }
     </script>
     <script type="text/javascript">

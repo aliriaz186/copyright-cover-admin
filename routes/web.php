@@ -33,5 +33,6 @@ Route::get('all-users', "DashboardController@allusers")->middleware('dashboard')
 Route::get('edit-guides', "DashboardController@editGuides")->middleware('dashboard');
 Route::get('edit-tips', "DashboardController@editTips")->middleware('dashboard');
 Route::post('update-text', "DashboardController@updateText")->middleware('dashboard');
+Route::post('post-add-tokens', "DashboardController@postAddTokens")->middleware('dashboard');
 Route::get('block-user/{id}', "DashboardController@block")->middleware('dashboard');
 Route::get('unblock-user/{id}', "DashboardController@unblock")->middleware('dashboard');
