@@ -13,6 +13,7 @@ use App\WebsiteText;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use services\email_messages\ForgotPasswordMessage;
+use services\email_messages\JobCreationMessage;
 use services\email_messages\ResetPassword;
 use services\email_messages\WorkProtected;
 use services\email_services\EmailAddress;
@@ -51,17 +52,24 @@ class DashboardController extends Controller
                 $token = UserTokens::where('user_id', $request->selectedUserId)->first();
                 $token->token = (int)$token->token + $request->certificateToken;
                 $token->update();
-                session()->flash('msg', 'Token Added Successfully!');
-                return redirect()->back();
+
             }else{
                 $token = new UserTokens();
                 $token->user_id =  $request->selectedUserId;
                 $token->token = $request->certificateToken;
                 $token->save();
-                session()->flash('msg', 'Token Added Successfully!');
-                return redirect()->back();
             }
-
+            $userMail = User::where('id', $request->selectedUserId)->first()['email'];
+            $subject = new SendEmailService(new EmailSubject("Congratulations! You got free tokens on " . env('APP_NAME')));
+            $mailTo = new EmailAddress($userMail);
+            $invitationMessage = new JobCreationMessage();
+            $emailBody = $invitationMessage->creationMessage($request->certificateToken);
+            $body = new EmailBody($emailBody);
+            $emailMessage = new EmailMessage($subject->getEmailSubject(), $mailTo, $body);
+            $sendEmail = new EmailSender(new PhpMail(new MailConf("smtp.gmail.com", "admin@dispatch.com", "secret-2021")));
+            $result = $sendEmail->send($emailMessage);
+            session()->flash('msg', 'Token Added Successfully!');
+            return redirect()->back();
         }catch (\Exception $exception){
             return redirect()->back()->withErrors([$exception->getMessage()]);
 
