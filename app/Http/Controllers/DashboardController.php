@@ -46,6 +46,11 @@ class DashboardController extends Controller
         return view('dashboard.all-users')->with(['users' => $users]);
     }
 
+    public function uploadUserFilesPage($id){
+        $user = User::where('id',  $id)->first();
+        return view('dashboard.upload-new-work')->with(['user' => $user]);
+    }
+
     public function postAddTokens(Request $request){
         try {
             if (UserTokens::where('user_id', $request->selectedUserId)->exists()){

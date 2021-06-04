@@ -40,6 +40,7 @@
                             <td>{{$item->tokens->token ?? 0}}</td>
                             <td>
                                 <button style="margin-top: 5px" onclick="selectedUserIdSet(`{{$item->id ?? ''}}`,`{{$item->first_name ?? ''}} {{$item->last_name ?? ''}}`)"  data-toggle="modal" data-target="#myModal1" class="btn btn-success" >ADD TOKENS</button>
+                                <a style="margin-top: 5px" href="{{url('upload-user-files')}}/{{$item->id}}" class="btn btn-info" >UPLOAD FILES</a>
 
                                 <button style="margin-top: 5px" onclick="setName(`{{$item->first_name ?? ''}} {{$item->last_name ?? ''}}`, `{{$item->email}}`,`{{$item->created_at}}`,`{{$item->subscription->subscription_expiry}}`,`{{$item->company_name}}`,`{{$item->address}}`,`{{$item->city}}`,`{{$item->state}}`,`{{$item->country}}`,`{{$item->telephone}}`,`{{$item->profession}}`,`{{$item->postal_code}}`)"  data-toggle="modal" data-target="#myModal" class="btn btn-info" >VIEW PROFILE</button>
                                 @if($item->active == 1)

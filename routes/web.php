@@ -36,3 +36,5 @@ Route::post('update-text', "DashboardController@updateText")->middleware('dashbo
 Route::post('post-add-tokens', "DashboardController@postAddTokens")->middleware('dashboard');
 Route::get('block-user/{id}', "DashboardController@block")->middleware('dashboard');
 Route::get('unblock-user/{id}', "DashboardController@unblock")->middleware('dashboard');
+Route::get('upload-user-files/{id}', "DashboardController@uploadUserFilesPage")->middleware('dashboard');
+Route::get('saving-new-work', "DashboardController@savingNewWork")->middleware('dashboard');
