@@ -36,6 +36,59 @@ class DashboardController extends Controller
         return view('dashboard.home')->with(['usersTotal' => $usersTotal,'certificatesTotal' => $certificatesTotal,'certificatesFilesTotal' => $certificatesFilesTotal]);
     }
 
+    public function registerUser(Request $request){
+        try {
+            if (!User::where('email', $request->emailAddress)->exists()) {
+
+                $user = new User();
+                $user->first_name = $request->firstName;
+                $user->last_name = $request->lastName;
+                $user->email = $request->emailAddress;
+                $randomPassword = $request->password;
+                $user->password = md5($randomPassword);
+                $result = $user->save();
+
+                $token = new UserTokens();
+                $token->user_id = $user->id;
+                $token->token = $request->certificateToken + 5;
+                $token->save();
+
+                $subscription = new Subscription();
+                $subscription->user_id = $user->id;
+                $oneYearOn = date('Y-m-d',strtotime(date("Y-m-d", time()) . " + 365 day"));
+                $subscription->subscription_expiry = $oneYearOn;
+                $subscription->save();
+                session()->flash('msg', 'User Registered. Login Credentials sent to user email!');
+                //Email
+                $subject = new SendEmailService(new EmailSubject("Welcome to " . env('APP_NAME') . '. Here is your Credentials to Login!'));
+                $mailTo = new EmailAddress($request->emailAddress);
+                $invitationMessage = new ForgotPasswordMessage();
+                $emailBody = $invitationMessage->invitationMessageBody($request->emailAddress , $randomPassword);
+                $body = new EmailBody($emailBody);
+                $emailMessage = new EmailMessage($subject->getEmailSubject(), $mailTo, $body);
+                $sendEmail = new EmailSender(new PhpMail(new MailConf("smtp.gmail.com", "admin@dispatch.com", "secret-2021")));
+                $result = $sendEmail->send($emailMessage);
+
+                //Email to admin
+//                $subject = new SendEmailService(new EmailSubject("A new User just registered on " . env('APP_NAME')));
+//                $mailTo = new EmailAddress('support@copyrightcover.com');
+//                $invitationMessage = new JobCreationMessage();
+//                $emailBody = $invitationMessage->creationMessage($request->emailAddress , $user->first_name, $user->last_name);
+//                $body = new EmailBody($emailBody);
+//                $emailMessage = new EmailMessage($subject->getEmailSubject(), $mailTo, $body);
+//                $sendEmail = new EmailSender(new PhpMail(new MailConf("smtp.gmail.com", "admin@dispatch.com", "secret-2021")));
+//                $result = $sendEmail->send($emailMessage);
+
+                return redirect()->back();
+//                return redirect('login');
+            } else {
+                return redirect()->back()->withErrors(['Email Already Exists!']);
+            }
+        } catch (\Exception $exception) {
+            return redirect()->back()->withErrors([$exception->getMessage()]);
+        }
+    }
+
     public function allusers()
     {
         $users = User::all();
@@ -124,5 +177,9 @@ class DashboardController extends Controller
         $user->update();
         session()->flash('msg', 'User UnBlocked!');
         return redirect()->back();
+    }
+
+    public function addNewUser(){
+        return view('dashboard.add-new-user');
     }
 }
