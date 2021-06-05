@@ -13,7 +13,7 @@ class ForgotPasswordMessage
              <div style="margin-left: 10px;margin-right: 10px;font-size: 17px;padding-top: 2px">Email: '. $email .'</div>
              <div style="margin-left: 10px;margin-right: 10px;font-size: 17px;padding-top: 2px">Password: '. $password .'</div>
              <div style="padding-top: 30px;padding-bottom: 40px">
- <a href="'. url(''). '/login" style=" background-color: #6b9ce8;
+ <a href="https://www.copyrightcover.com/login" style=" background-color: #6b9ce8;
   border: none;
   color: white;
   padding: 10px 27px;
