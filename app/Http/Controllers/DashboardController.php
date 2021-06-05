@@ -79,7 +79,7 @@ class DashboardController extends Controller
 //                $sendEmail = new EmailSender(new PhpMail(new MailConf("smtp.gmail.com", "admin@dispatch.com", "secret-2021")));
 //                $result = $sendEmail->send($emailMessage);
 
-                return redirect()->back();
+                return redirect('add-new-user');
 //                return redirect('login');
             } else {
                 return redirect()->back()->withErrors(['Email Already Exists!']);
